@@ -14,14 +14,24 @@ public class ProdutoService {
     @Autowired
     ProdutoRepository repository;
 
-    // Método para receber e salvar um produto novo
+    // Método para receber e salvar um produto novo (se houver um produto com o
+    // mesmo nome, cancela a operação)
     public String cadastro(Produto produto) {
+        List<Produto> produtos = repository.findAll();
         try {
-            repository.save(produto);
-            return "Produto salvo com sucesso";
+            for (Produto p : produtos) {
+                if (produto.getNome().equalsIgnoreCase(p.getNome())) {
+                    return "Já existe um produto com o mesmo nome!!";
+                } else {
+                    repository.save(produto);
+                    return "Produto cadastrado com sucesso!!";
+                }
+            }
+
         } catch (Exception e) {
             return "Erro ao salvar o produto" + e.getMessage();
         }
+        return "";
     }
 
     // Método para listar todos produtos
