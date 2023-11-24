@@ -25,10 +25,10 @@ public class PedidoService {
         try {
             pedido.setData(LocalDate.now());
             pedidoRepository.save(pedido);
+            return "Pedido salvo com sucesso";
         } catch (Exception e) {
             return "Erro ao cadastrar o pedido: " + e.getMessage();
         }
-        return "";
     }
 
     public List<PedidoDTO> listaPedido() {
