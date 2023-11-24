@@ -24,7 +24,4 @@ public class Produto {
     private String nome;
     private double valor;
     private String ingredientes;
-
-    @ManyToOne(cascade = CascadeType.REFRESH)
-    private Pedido pedido;
 }

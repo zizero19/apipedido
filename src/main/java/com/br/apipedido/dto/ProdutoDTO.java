@@ -1,5 +1,6 @@
 package com.br.apipedido.dto;
 
+import com.br.apipedido.model.Pedido;
 import com.br.apipedido.model.Produto;
 
 import lombok.AllArgsConstructor;

@@ -18,20 +18,19 @@ public class ProdutoService {
     // mesmo nome, cancela a operação)
     public String cadastro(Produto produto) {
         List<Produto> produtos = repository.findAll();
+
         try {
             for (Produto p : produtos) {
                 if (produto.getNome().equalsIgnoreCase(p.getNome())) {
                     return "Já existe um produto com o mesmo nome!!";
-                } else {
-                    repository.save(produto);
-                    return "Produto cadastrado com sucesso!!";
                 }
             }
-
+            repository.save(produto);
+            return "Produto cadastrado com sucesso!!";
         } catch (Exception e) {
-            return "Erro ao salvar o produto" + e.getMessage();
+            return "Erro ao cadastrar o produto" + e.getMessage();
         }
-        return "";
+
     }
 
     // Método para listar todos produtos

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.br.apipedido.dto.PedidoDTO;
-import com.br.apipedido.dto.ProdutoDTO;
 import com.br.apipedido.model.Pedido;
 import com.br.apipedido.repository.PedidoRepository;
 import com.br.apipedido.repository.ProdutoRepository;
