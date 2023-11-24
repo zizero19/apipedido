@@ -21,6 +21,7 @@ public class PedidoService {
     @Autowired
     ProdutoRepository produtoRepository;
 
+    // Método para criar um novo pedido
     public String novoPedido(Pedido pedido) {
         try {
             pedido.setData(LocalDate.now());
@@ -31,6 +32,7 @@ public class PedidoService {
         }
     }
 
+    // Método para trazer uma lista de pedidos
     public List<PedidoDTO> listaPedido() {
         try {
             List<Pedido> pedidos = pedidoRepository.findAll();
@@ -40,4 +42,28 @@ public class PedidoService {
             return null;
         }
     }
+
+    // Método para buscar um pedido
+    public PedidoDTO buscaPedido(int id) {
+        try {
+            Pedido pedidoBusca = pedidoRepository.findById(id).get();
+            PedidoDTO dto = new PedidoDTO(pedidoBusca);
+            return dto;
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar pedido: " + e.getMessage());
+            return null;
+        }
+    }
+
+    // Método para excluir pedido
+    public String excluirPedido(int id) {
+        try {
+            pedidoRepository.deleteById(id);
+            return "Pedido excluido com sucesso!!";
+        } catch (Exception e) {
+            return "Erro ao excluir usuario: " + e.getMessage();
+        }
+
+    }
+
 }
