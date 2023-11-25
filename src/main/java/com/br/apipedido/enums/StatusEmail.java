@@ -1,7 +1,7 @@
 package com.br.apipedido.enums;
 
-public class StatusEmail {
-    
+public enum StatusEmail {
+
     SENT,
     ERROR;
 }
