@@ -1,14 +1,21 @@
 package com.br.apipedido.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.br.apipedido.dto.PedidoDTO;
+import com.br.apipedido.enums.StatusEmail;
+import com.br.apipedido.model.Email;
 import com.br.apipedido.model.Pedido;
+import com.br.apipedido.model.Produto;
+import com.br.apipedido.repository.EmailRepository;
 import com.br.apipedido.repository.PedidoRepository;
 import com.br.apipedido.repository.ProdutoRepository;
 
@@ -21,14 +28,55 @@ public class PedidoService {
     @Autowired
     ProdutoRepository produtoRepository;
 
+    @Autowired
+    private JavaMailSender emailSender;
+
+    @Autowired
+    EmailRepository emailRepository;
+
     // Método para criar um novo pedido
     public String novoPedido(Pedido pedido) {
+        Email email = new Email();
+        double valorTotalPedido = 0.0;
         try {
+            for (Produto produto : pedido.getProdutos()) {
+                valorTotalPedido += produto.getValor();
+            }
+            pedido.setValorTotal(valorTotalPedido);
             pedido.setData(LocalDate.now());
             pedidoRepository.save(pedido);
-            return "Pedido salvo com sucesso";
+
+            email.setOwnerRef("Lanchonete Rei Dos Lanches");
+            email.setEmailFrom("cicero.ferro.78@gmail.com");
+            email.setEmailTo("andreihaendel@gmail.com");
+            email.setSubject("Pedido N° " + pedido.getId());
+
+            StringBuilder textoEmail = new StringBuilder();
+            textoEmail.append("PEDIDO N° ").append(pedido.getId()).append("\n Lista de produtos: \n");
+
+            for (Produto produto : pedido.getProdutos()) {
+                textoEmail.append(produto.getNome() + " | " + produto.getValor());
+                textoEmail.append("\n");
+            }
+            textoEmail.append("\n Valor Total: " + pedido.getValorTotal());
+
+            email.setText(textoEmail.toString());
+            email.setSendDateEmail(LocalDateTime.now());
+
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(email.getEmailFrom());
+            message.setTo(email.getEmailTo());
+            message.setSubject(email.getSubject());
+            message.setText(email.getText());
+            emailSender.send(message);
+
+            email.setStatusEmail(StatusEmail.SENT);
+            return "Pedido e email salvo com sucesso";
         } catch (Exception e) {
-            return "Erro ao cadastrar o pedido: " + e.getMessage();
+            email.setStatusEmail(StatusEmail.ERROR);
+            return "Erro ao cadastrar o pedido e email: " + e.getMessage();
+        } finally {
+            emailRepository.save(email);
         }
     }
 
