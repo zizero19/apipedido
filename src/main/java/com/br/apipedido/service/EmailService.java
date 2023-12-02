@@ -21,6 +21,12 @@ public class EmailService {
     @Autowired
     private JavaMailSender emailSender;
 
+    public Email buildEmail() {
+        Email email = new Email();
+        // Construção do corpo do email
+        return email;
+    }
+
     public Email sendEmail(Email email) {
         email.setSendDateEmail(LocalDateTime.now());
         try {
