@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.br.apipedido.enums.StatusEmail;
 import com.br.apipedido.model.Email;
+import com.br.apipedido.model.Pedido;
+import com.br.apipedido.model.Produto;
 import com.br.apipedido.repository.EmailRepository;
 
 @Service
@@ -21,9 +23,22 @@ public class EmailService {
     @Autowired
     private JavaMailSender emailSender;
 
-    public Email buildEmail() {
+    public Email buildEmail(Pedido pedido) {
         Email email = new Email();
-        // Construção do corpo do email
+        StringBuilder textoEmail = new StringBuilder();
+        textoEmail.append("PEDIDO N° ").append(pedido.getId()).append("\n Lista de produtos: \n");
+
+        for (Produto produto : pedido.getProdutos()) {
+            textoEmail.append(produto.getNome() + " | " + produto.getValor());
+            textoEmail.append("\n");
+        }
+        textoEmail.append("\n Valor Total: " + pedido.getValorTotal());
+
+        email.setEmailFrom("cicero.ferro.78@gmail.com");
+        email.setEmailTo(pedido.getUsuario().getEmail());
+        email.setSubject("PEDIDO N° " + pedido.getId());
+        email.setText(textoEmail.toString());
+
         return email;
     }
 

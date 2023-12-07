@@ -2,7 +2,6 @@ package com.br.apipedido.controller;
 
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,9 +28,9 @@ public class PedidoController {
 
     @PostMapping("/cadastro")
     public String cadastroPedido(Pedido pedido) {
-        Email email = new Email();
-        eService.sendEmail(email);
-        return pService.novoPedido(pedido);
+        pService.novoPedido(pedido);
+        Email email = eService.buildEmail(pedido);
+        return eService.sendEmail(email);
     }
 
     @GetMapping("/lista")
