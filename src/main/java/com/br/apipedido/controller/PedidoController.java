@@ -27,7 +27,7 @@ public class PedidoController {
     EmailService eService;
 
     @PostMapping("/cadastro")
-    public String cadastroPedido(Pedido pedido) {
+    public Email cadastroPedido(Pedido pedido) {
         pService.novoPedido(pedido);
         Email email = eService.buildEmail(pedido);
         return eService.sendEmail(email);

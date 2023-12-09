@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.br.apipedido.dto.PedidoDTO;
 import com.br.apipedido.model.Pedido;
+import com.br.apipedido.model.Produto;
 import com.br.apipedido.repository.PedidoRepository;
 import com.br.apipedido.repository.ProdutoRepository;
 
@@ -23,7 +24,13 @@ public class PedidoService {
 
     // Método para criar um novo pedido
     public String novoPedido(Pedido pedido) {
+        Double valorTotalPedido = 0.0;
         try {
+            for (Produto produto : pedido.getProdutos()) {
+                valorTotalPedido += produto.getValor();
+            }
+            valorTotalPedido = valorTotalPedido * pedido.getQtd();
+            pedido.setValorTotal(valorTotalPedido);
             pedido.setData(LocalDate.now());
             pedidoRepository.save(pedido);
             return "Pedido salvo com sucesso";

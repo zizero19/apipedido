@@ -27,10 +27,9 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String idCliente;
-    private String nomeCliente;
     private double valorTotal;
     private LocalDate data;
+    private int qtd;
 
     @ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(name = "pedido_produto", joinColumns = @JoinColumn(name = "pedido_id"), inverseJoinColumns = @JoinColumn(name = "produto_id"))
@@ -38,4 +37,10 @@ public class Pedido {
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     private Usuario usuario;
+
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    private FormaPagamento formaPagamento;
+
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    private Endereco endereco;
 }

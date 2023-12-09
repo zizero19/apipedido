@@ -27,6 +27,6 @@ public class Usuario {
     private String cpf;
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pedido")
-    private List<Produto> produtos;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    private List<Pedido> pedidos;
 }

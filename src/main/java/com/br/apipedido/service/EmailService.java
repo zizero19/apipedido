@@ -26,12 +26,25 @@ public class EmailService {
     public Email buildEmail(Pedido pedido) {
         Email email = new Email();
         StringBuilder textoEmail = new StringBuilder();
-        textoEmail.append("PEDIDO N° ").append(pedido.getId()).append("\n Lista de produtos: \n");
+        textoEmail.append("PEDIDO N° " + pedido.getId() + " para " + pedido.getUsuario().getNome());
+        textoEmail.append("\n DADOS DO CLIENTE" +
+                "\n Nome: " + pedido.getUsuario().getNome() +
+                "\n Email: " + pedido.getUsuario().getEmail() +
+                "\n CPF: " + pedido.getUsuario().getCpf() + "\n ");
 
+        textoEmail.append("\n ENDEREÇO DO CLIENTE" +
+                "\n Rua: " + pedido.getEndereco().getRua() +
+                "\n Numero: " + pedido.getEndereco().getNumero() +
+                "\n Bairro: " + pedido.getEndereco().getBairro() +
+                "\n Cidade: " + pedido.getEndereco().getCidade() + "\n ");
+
+        textoEmail.append("\n LISTA DE PRODUTOS: \n");
         for (Produto produto : pedido.getProdutos()) {
             textoEmail.append(produto.getNome() + " | " + produto.getValor());
             textoEmail.append("\n");
         }
+        textoEmail.append("\n Forma de Pagamento: " + pedido.getFormaPagamento().getTipo());
+        textoEmail.append("\n Quantidade: " + pedido.getQtd());
         textoEmail.append("\n Valor Total: " + pedido.getValorTotal());
 
         email.setEmailFrom("cicero.ferro.78@gmail.com");
